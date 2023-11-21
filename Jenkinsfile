@@ -1,31 +1,31 @@
 pipeline {
     agent any
 
+    environment {
+        // Define environment variables if needed
+        MAVEN_HOME = tool 'Maven'
+        PATH = "$PATH:$MAVEN_HOME/bin"
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                // Get the latest code from the Git repository
                 checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                // Build the Maven project
-                sh 'mvn clean install'
+                script {
+                    def mavenHome = tool 'Maven'
+                    sh "${mavenHome}/bin/mvn clean install"
+                }
             }
         }
 
-        stage('Test') {
-            steps {
-                // Run tests (replace this with your actual test command)
-                sh 'mvn test'
-            }
-        }
 
         stage('Deploy') {
             steps {
-                // Add deployment steps (if applicable)
                 echo 'Deployment steps go here'
             }
         }
