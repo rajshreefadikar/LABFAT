@@ -11,12 +11,7 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Deploy') {
-            steps {
-                sh './deploy.sh'
-            }
-        }
-    }
+        
     
     post {
         success {
