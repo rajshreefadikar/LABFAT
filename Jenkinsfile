@@ -1,25 +1,73 @@
 pipeline {
     agent any
-
+    tools {
+        maven 'Maven'
+    }
     stages {
-        stage('Get Latest Code') {
-            // Add code to get the latest code from GitHub
+        stage('Clone Code') 
+        {
+            steps {
+                git 'https://github.com/rajshreefadikar/LABFAT.git'
+                echo 'Data Clone Successfully'
+            }
         }
-
-        stage('Build Maven Project') {
-            // Add code to build the Maven project
+         stage('Build Project') 
+        {
+            steps {
+                bat 'mvn install'
+                echo 'Data Clone Successfully'
+            }
         }
+        
+    
+    stage('Build Docker Image') {
+    steps {
+        script {
+            def dockerImage = 'labfat:latest'
 
-        stage('Build Docker Image') {
-            // Add the Docker image build stage code
-        }
+            // Use the 'bat' step for Windows batch commands
+            def dockerBuildCmd = "docker build -t ${dockerImage} ."
 
-        stage('Push Docker Image') {
-            // Add the Docker image push stage code
-        }
-
-        stage('Handle Errors') {
-            // Add code to handle errors
+            
         }
     }
+}
+
+    
+    stage('Push Docker Image') {
+            steps {
+                // Push Docker image to a central repository
+                script {
+                    def dockerImage = 'labfat:latest'
+                    def registryUrl = 'https://hub.docker.com/repository/docker/rajshree/LABFAT/general'
+
+                    
+                    
+                    
+                    withCredentials([usernamePassword(credentialsId: 'DockerID', passwordVariable: 'rajshree123', usernameVariable: 'rajshree')]) {
+    
+
+    bat """docker login -u "${usernameVariable}" -p "${passwordVariable}" ${registryUrl}"""
+    bat """docker push ${dockerImage}"""
+}
+                }
+
+}
+}
+        stage('Handle Errors') {
+            steps {
+                script {
+                    currentBuild.result = 'FAILURE'
+                    echo 'Error: The pipeline has encountered a failure.'
+                }
+
+}
+}
+}
+
+triggers{
+            cron('H/5 * * * *')
+    
+}
+
 }
