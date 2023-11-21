@@ -1,44 +1,25 @@
 pipeline {
     agent any
 
-    environment {
-        // Define environment variables if needed
-        MAVEN_HOME = tool 'Maven'
-        PATH = "$PATH:$MAVEN_HOME/bin"
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
+        stage('Get Latest Code') {
+            // Add code to get the latest code from GitHub
         }
 
-        stage('Build') {
-            steps {
-                script {
-                    def mavenHome = tool 'Maven'
-                    sh "${mavenHome}/bin/mvn clean install"
-                }
-            }
+        stage('Build Maven Project') {
+            // Add code to build the Maven project
         }
 
-
-        stage('Deploy') {
-            steps {
-                echo 'Deployment steps go here'
-            }
+        stage('Build Docker Image') {
+            // Add the Docker image build stage code
         }
-    }
 
-    post {
-        success {
-            // Actions to perform if the pipeline succeeds
-            echo 'Pipeline succeeded!'
+        stage('Push Docker Image') {
+            // Add the Docker image push stage code
         }
-        failure {
-            // Actions to perform if the pipeline fails
-            echo 'Pipeline failed!'
+
+        stage('Handle Errors') {
+            // Add code to handle errors
         }
     }
 }
